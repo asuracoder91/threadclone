@@ -2,6 +2,7 @@ class ListData {
   final String avatar;
   final String name;
   final bool blueCheck;
+  final String time;
   final String? text;
   final List<String> images;
   final int replies;
@@ -12,6 +13,7 @@ class ListData {
     required this.avatar,
     required this.name,
     required this.blueCheck,
+    required this.time,
     required this.text,
     required this.images,
     required this.replies,

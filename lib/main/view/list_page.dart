@@ -50,15 +50,15 @@ class _ListPageState extends ConsumerState<ListPage> {
       child: Scaffold(
         //appBar, 크기 조정
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
+          preferredSize: const Size.fromHeight(60),
           child: AppBar(
             automaticallyImplyLeading: false, // Custom Leading을 위해 자동생성 막기
             centerTitle: true,
             title: Padding(
-              padding: const EdgeInsets.only(top: 18.0), // 아이콘 상단 패딩
+              padding: const EdgeInsets.only(top: 6.0), // 아이콘 상단 패딩
               child: SvgPicture.asset(
                 "assets/thread.svg",
-                width: 36,
+                width: 32,
                 alignment: Alignment.center,
               ),
             ),
@@ -77,42 +77,57 @@ class _ListPageState extends ConsumerState<ListPage> {
           elevation: 2.0,
           selectedIconTheme: const IconThemeData(size: 26), // 선택된 아이콘의 크기 지정
           unselectedIconTheme: const IconThemeData(size: 26),
-          items: const [
+          items: [
             BottomNavigationBarItem(
               icon: Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 12.0,
                   bottom: 8.0,
                 ),
-                child: FaIcon(FontAwesomeIcons.house),
+                child: _selectedIndex == 0
+                    ? SvgPicture.asset("assets/icons/feed.svg", width: 26)
+                    : SvgPicture.asset("assets/icons/feed_unselect.svg",
+                        width: 26),
               ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: Padding(
-                padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
-                child: FaIcon(FontAwesomeIcons.magnifyingGlass),
+                padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                child: _selectedIndex == 1
+                    ? SvgPicture.asset("assets/icons/magnify.svg", width: 26)
+                    : SvgPicture.asset("assets/icons/magnify_unselect.svg",
+                        width: 26),
               ),
               label: 'Search',
             ),
             BottomNavigationBarItem(
               icon: Padding(
-                padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
-                child: FaIcon(FontAwesomeIcons.penToSquare),
+                padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                child: _selectedIndex == 2
+                    ? SvgPicture.asset("assets/icons/write.svg", width: 26)
+                    : SvgPicture.asset("assets/icons/write_unselect.svg",
+                        width: 26),
               ),
               label: 'Write',
             ),
             BottomNavigationBarItem(
               icon: Padding(
-                padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
-                child: FaIcon(FontAwesomeIcons.heart),
+                padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                child: _selectedIndex == 3
+                    ? SvgPicture.asset("assets/icons/heart.svg", width: 26)
+                    : SvgPicture.asset("assets/icons/heart_unselect.svg",
+                        width: 26),
               ),
               label: 'Like',
             ),
             BottomNavigationBarItem(
               icon: Padding(
-                padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
-                child: FaIcon(FontAwesomeIcons.user),
+                padding: const EdgeInsets.only(top: 10.0, bottom: 8.0),
+                child: _selectedIndex == 4
+                    ? SvgPicture.asset("assets/icons/user.svg", width: 26)
+                    : SvgPicture.asset("assets/icons/user_unselect.svg",
+                        width: 26),
               ),
               label: 'User',
             ),
