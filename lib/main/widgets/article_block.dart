@@ -5,10 +5,37 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../constants/gaps.dart';
 
 class ArticleBlock extends StatelessWidget {
-  const ArticleBlock({super.key});
+  const ArticleBlock(
+      {super.key,
+      required this.avatar,
+      required this.name,
+      required this.blueCheck,
+      required this.time,
+      required this.text,
+      required this.images,
+      required this.replies,
+      required this.replyAvatars,
+      required this.likes});
+
+  final String avatar;
+  final String name;
+  final bool blueCheck;
+  final String time;
+  final String? text;
+  final List<String> images;
+  final int replies;
+  final List<String> replyAvatars;
+  final int likes;
 
   @override
   Widget build(BuildContext context) {
+    final PageController pageController = PageController(
+      viewportFraction: 0.97, // 97% of the viewport width
+    );
+    double pageViewOffset = (MediaQuery.of(context).size.width * 0.78) *
+        (1 - pageController.viewportFraction) /
+        2;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
       child: Column(
@@ -30,9 +57,9 @@ class ArticleBlock extends StatelessWidget {
                             shape: BoxShape.circle,
                             color: Colors.grey,
                           ),
-                          child: const CircleAvatar(
+                          child: CircleAvatar(
                             radius: 17,
-                            foregroundImage: AssetImage("assets/elon.webp"),
+                            foregroundImage: AssetImage(avatar),
                           ),
                         ),
                       ),
@@ -68,10 +95,13 @@ class ArticleBlock extends StatelessWidget {
                       )
                     ],
                   ),
-                  Container(
-                    width: 1.0,
-                    color: Colors.black,
-                  ),
+                  Gaps.v12,
+                  if (replies > 0)
+                    Container(
+                      height: images.isNotEmpty ? 230 : 40,
+                      width: 3.0,
+                      color: Colors.grey.shade300,
+                    ),
                 ],
               ),
               Gaps.v2,
@@ -89,24 +119,27 @@ class ArticleBlock extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            const Text(
-                              "Elon Musk",
-                              style: TextStyle(
+                            Text(
+                              name,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Gaps.h6,
-                            SvgPicture.asset(
-                              "assets/icons/verified.svg",
-                              width: 14,
-                            ),
+                            blueCheck
+                                ? SvgPicture.asset(
+                                    "assets/icons/verified.svg",
+                                    width: 14,
+                                  )
+                                : Container(),
                           ],
                         ),
-                        const Row(
+                        Row(
                           children: [
-                            Text("2m", style: TextStyle(color: Colors.grey)),
+                            Text(time,
+                                style: const TextStyle(color: Colors.grey)),
                             Gaps.h6,
-                            FaIcon(FontAwesomeIcons.ellipsis, size: 16),
+                            const FaIcon(FontAwesomeIcons.ellipsis, size: 16),
                           ],
                         )
                       ],
@@ -115,21 +148,36 @@ class ArticleBlock extends StatelessWidget {
                   Gaps.v2,
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.78,
-                    child: const Text(
-                        "Let's fight with Jujitsu, Mark. Are you scared?"),
+                    child: Text(text ?? ""),
                   ),
-                  Gaps.v10,
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.78,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: const DecorationImage(
-                        image: AssetImage("assets/letsfight.png"),
-                        fit: BoxFit.cover,
+                  if (images.isNotEmpty) Gaps.v10,
+                  if (images.isNotEmpty)
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.78,
+                      height: 200,
+                      child: PageView.builder(
+                        controller: pageController,
+                        itemCount: images.length,
+                        itemBuilder: (context, index) {
+                          return Transform.translate(
+                            offset: Offset(-pageViewOffset, 0),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: DecorationImage(
+                                    image: AssetImage(images[index]),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),
+
                   Gaps.v14,
                   const Row(
                     children: [
@@ -148,59 +196,141 @@ class ArticleBlock extends StatelessWidget {
           ),
           Gaps.v14,
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 width: 52,
-                height: 24,
-                child: Stack(children: [
-                  Positioned(
-                    left: 3,
-                    bottom: 0,
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: const Center(
-                        child: CircleAvatar(
-                          radius: 9,
-                          foregroundImage: AssetImage("assets/kimj.jpeg"),
+                height: replies >= 3 ? 40 : 24,
+                child: replies >= 3
+                    ? Stack(children: [
+                        Positioned(
+                          left: 3,
+                          bottom: 10,
+                          child: Container(
+                            width: 24,
+                            height: 24,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: Center(
+                              child: CircleAvatar(
+                                radius: 9,
+                                foregroundImage: AssetImage(replyAvatars[0]),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    bottom: 0,
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: const Center(
-                        child: CircleAvatar(
-                          radius: 9,
-                          foregroundImage: AssetImage("assets/johnwick.jpeg"),
+                        Positioned(
+                          left: 20,
+                          bottom: 0,
+                          child: Container(
+                            width: 16,
+                            height: 16,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: Center(
+                              child: CircleAvatar(
+                                radius: 7,
+                                foregroundImage: AssetImage(replyAvatars[1]),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                ]),
+                        Positioned(
+                          left: 24,
+                          bottom: 14,
+                          child: Container(
+                            width: 26,
+                            height: 26,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: Center(
+                              child: CircleAvatar(
+                                radius: 12,
+                                foregroundImage: AssetImage(replyAvatars[2]),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ])
+                    : replies >= 1
+                        ? Stack(children: [
+                            Positioned(
+                              left: 3,
+                              bottom: 0,
+                              child: Container(
+                                width: 24,
+                                height: 24,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                ),
+                                child: Center(
+                                  child: CircleAvatar(
+                                    radius: 9,
+                                    foregroundImage:
+                                        AssetImage(replyAvatars[0]),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 20,
+                              bottom: 0,
+                              child: Container(
+                                width: 24,
+                                height: 24,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                ),
+                                child: Center(
+                                  child: CircleAvatar(
+                                    radius: 9,
+                                    foregroundImage:
+                                        AssetImage(replyAvatars[1]),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ])
+                        : Container(),
               ),
-              const Row(children: [
+              Row(children: [
+                if (replies > 0)
+                  Row(
+                    children: [
+                      replies >= 3 ? Gaps.h10 : Gaps.h1,
+                      Text(
+                        replies.toString(),
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const Text(
+                        " replies",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      Gaps.h6,
+                      const Text("·"),
+                      Gaps.h6,
+                    ],
+                  ),
                 Text(
-                  "2 replies",
-                  style: TextStyle(color: Colors.grey),
+                  likes.toString(),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
                 ),
-                Gaps.h6,
-                Text("·"),
-                Gaps.h6,
-                Text(
-                  "631 likes",
+                const Text(
+                  " likes",
                   style: TextStyle(color: Colors.grey),
                 ),
               ]),
