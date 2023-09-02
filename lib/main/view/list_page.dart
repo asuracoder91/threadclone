@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:thread/main/view/main_page.dart';
+import 'package:thread/main/view/search_page.dart';
 
 import '../../constants/sizes.dart';
+import '../widgets/write_page.dart';
 
 class ListPage extends ConsumerStatefulWidget {
   const ListPage({super.key});
@@ -20,9 +23,7 @@ class _ListPageState extends ConsumerState<ListPage> {
 
   final screens = [
     const MainPage(),
-    const Center(
-      child: Text('Search'),
-    ),
+    const SearchPage(),
     const Center(
       child: Text('Write'),
     ),
@@ -35,9 +36,22 @@ class _ListPageState extends ConsumerState<ListPage> {
   ];
 
   void _onTap(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    switch (index) {
+      case 1:
+        // Move to SearchPage
+        context.go(SearchPage.routeURL);
+      case 2:
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => const WritePage(),
+          backgroundColor: Colors.white,
+          isScrollControlled: true,
+        );
+      default:
+        setState(() {
+          _selectedIndex = index;
+        });
+    }
   }
 
   @override
@@ -54,6 +68,8 @@ class _ListPageState extends ConsumerState<ListPage> {
           child: AppBar(
             automaticallyImplyLeading: false, // Custom Leading을 위해 자동생성 막기
             centerTitle: true,
+
+            scrolledUnderElevation: 0.0,
             title: Padding(
               padding: const EdgeInsets.only(top: 6.0), // 아이콘 상단 패딩
               child: SvgPicture.asset(

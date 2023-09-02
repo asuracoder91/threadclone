@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:thread/main/widgets/bottom_menu.dart';
 
 import '../../constants/gaps.dart';
 
-class ArticleBlock extends StatelessWidget {
+class ArticleBlock extends StatefulWidget {
   const ArticleBlock(
       {super.key,
       required this.avatar,
@@ -26,6 +27,20 @@ class ArticleBlock extends StatelessWidget {
   final int replies;
   final List<String> replyAvatars;
   final int likes;
+
+  @override
+  State<ArticleBlock> createState() => _ArticleBlockState();
+}
+
+class _ArticleBlockState extends State<ArticleBlock> {
+  _showBottomMenu() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => const BottomMenu(),
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +74,7 @@ class ArticleBlock extends StatelessWidget {
                           ),
                           child: CircleAvatar(
                             radius: 17,
-                            foregroundImage: AssetImage(avatar),
+                            foregroundImage: AssetImage(widget.avatar),
                           ),
                         ),
                       ),
@@ -96,9 +111,9 @@ class ArticleBlock extends StatelessWidget {
                     ],
                   ),
                   Gaps.v12,
-                  if (replies > 0)
+                  if (widget.replies > 0)
                     Container(
-                      height: images.isNotEmpty ? 230 : 40,
+                      height: widget.images.isNotEmpty ? 230 : 40,
                       width: 3.0,
                       color: Colors.grey.shade300,
                     ),
@@ -120,13 +135,13 @@ class ArticleBlock extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              name,
+                              widget.name,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Gaps.h6,
-                            blueCheck
+                            widget.blueCheck
                                 ? SvgPicture.asset(
                                     "assets/icons/verified.svg",
                                     width: 14,
@@ -136,10 +151,13 @@ class ArticleBlock extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Text(time,
+                            Text(widget.time,
                                 style: const TextStyle(color: Colors.grey)),
                             Gaps.h6,
-                            const FaIcon(FontAwesomeIcons.ellipsis, size: 16),
+                            GestureDetector(
+                                onTap: _showBottomMenu,
+                                child: const FaIcon(FontAwesomeIcons.ellipsis,
+                                    size: 16)),
                           ],
                         )
                       ],
@@ -148,16 +166,16 @@ class ArticleBlock extends StatelessWidget {
                   Gaps.v2,
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.78,
-                    child: Text(text ?? ""),
+                    child: Text(widget.text ?? ""),
                   ),
-                  if (images.isNotEmpty) Gaps.v10,
-                  if (images.isNotEmpty)
+                  if (widget.images.isNotEmpty) Gaps.v10,
+                  if (widget.images.isNotEmpty)
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.78,
                       height: 200,
                       child: PageView.builder(
                         controller: pageController,
-                        itemCount: images.length,
+                        itemCount: widget.images.length,
                         itemBuilder: (context, index) {
                           return Transform.translate(
                             offset: Offset(-pageViewOffset, 0),
@@ -167,7 +185,7 @@ class ArticleBlock extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
                                   image: DecorationImage(
-                                    image: AssetImage(images[index]),
+                                    image: AssetImage(widget.images[index]),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -200,8 +218,8 @@ class ArticleBlock extends StatelessWidget {
             children: [
               SizedBox(
                 width: 52,
-                height: replies >= 3 ? 40 : 24,
-                child: replies >= 3
+                height: widget.replies >= 3 ? 40 : 24,
+                child: widget.replies >= 3
                     ? Stack(children: [
                         Positioned(
                           left: 3,
@@ -216,7 +234,8 @@ class ArticleBlock extends StatelessWidget {
                             child: Center(
                               child: CircleAvatar(
                                 radius: 9,
-                                foregroundImage: AssetImage(replyAvatars[0]),
+                                foregroundImage:
+                                    AssetImage(widget.replyAvatars[0]),
                               ),
                             ),
                           ),
@@ -234,7 +253,8 @@ class ArticleBlock extends StatelessWidget {
                             child: Center(
                               child: CircleAvatar(
                                 radius: 7,
-                                foregroundImage: AssetImage(replyAvatars[1]),
+                                foregroundImage:
+                                    AssetImage(widget.replyAvatars[1]),
                               ),
                             ),
                           ),
@@ -252,13 +272,14 @@ class ArticleBlock extends StatelessWidget {
                             child: Center(
                               child: CircleAvatar(
                                 radius: 12,
-                                foregroundImage: AssetImage(replyAvatars[2]),
+                                foregroundImage:
+                                    AssetImage(widget.replyAvatars[2]),
                               ),
                             ),
                           ),
                         ),
                       ])
-                    : replies >= 1
+                    : widget.replies >= 1
                         ? Stack(children: [
                             Positioned(
                               left: 3,
@@ -274,7 +295,7 @@ class ArticleBlock extends StatelessWidget {
                                   child: CircleAvatar(
                                     radius: 9,
                                     foregroundImage:
-                                        AssetImage(replyAvatars[0]),
+                                        AssetImage(widget.replyAvatars[0]),
                                   ),
                                 ),
                               ),
@@ -293,7 +314,7 @@ class ArticleBlock extends StatelessWidget {
                                   child: CircleAvatar(
                                     radius: 9,
                                     foregroundImage:
-                                        AssetImage(replyAvatars[1]),
+                                        AssetImage(widget.replyAvatars[1]),
                                   ),
                                 ),
                               ),
@@ -302,12 +323,12 @@ class ArticleBlock extends StatelessWidget {
                         : Container(),
               ),
               Row(children: [
-                if (replies > 0)
+                if (widget.replies > 0)
                   Row(
                     children: [
-                      replies >= 3 ? Gaps.h10 : Gaps.h1,
+                      widget.replies >= 3 ? Gaps.h10 : Gaps.h1,
                       Text(
-                        replies.toString(),
+                        widget.replies.toString(),
                         style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 16,
@@ -323,7 +344,7 @@ class ArticleBlock extends StatelessWidget {
                     ],
                   ),
                 Text(
-                  likes.toString(),
+                  widget.likes.toString(),
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
