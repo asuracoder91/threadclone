@@ -8,6 +8,7 @@ import 'package:thread/main/view/search_page.dart';
 
 import '../../constants/sizes.dart';
 import '../widgets/write_page.dart';
+import 'activity_page.dart';
 
 class ListPage extends ConsumerStatefulWidget {
   const ListPage({super.key});
@@ -27,9 +28,7 @@ class _ListPageState extends ConsumerState<ListPage> {
     const Center(
       child: Text('Write'),
     ),
-    const Center(
-      child: Text('Like'),
-    ),
+    const ActivityPage(),
     const Center(
       child: Text('User'),
     ),
@@ -37,9 +36,6 @@ class _ListPageState extends ConsumerState<ListPage> {
 
   void _onTap(int index) {
     switch (index) {
-      case 1:
-        // Move to SearchPage
-        context.go(SearchPage.routeURL);
       case 2:
         showModalBottomSheet(
           context: context,
@@ -63,23 +59,27 @@ class _ListPageState extends ConsumerState<ListPage> {
       },
       child: Scaffold(
         //appBar, 크기 조정
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: AppBar(
-            automaticallyImplyLeading: false, // Custom Leading을 위해 자동생성 막기
-            centerTitle: true,
+        appBar: _selectedIndex == 1 ||
+                _selectedIndex == 3 // Search, Activity Page에서는 AppBar를 숨김
+            ? null
+            : PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: AppBar(
+                  automaticallyImplyLeading:
+                      false, // Custom Leading을 위해 자동생성 막기
+                  centerTitle: true,
 
-            scrolledUnderElevation: 0.0,
-            title: Padding(
-              padding: const EdgeInsets.only(top: 6.0), // 아이콘 상단 패딩
-              child: SvgPicture.asset(
-                "assets/thread.svg",
-                width: 32,
-                alignment: Alignment.center,
+                  scrolledUnderElevation: 0.0,
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 6.0), // 아이콘 상단 패딩
+                    child: SvgPicture.asset(
+                      "assets/thread.svg",
+                      width: 32,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
         body: screens[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,

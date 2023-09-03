@@ -1,4 +1,6 @@
+import 'package:thread/main/model/activity_data.dart';
 import 'package:thread/main/model/list_data.dart';
+import 'package:thread/main/model/search_data.dart';
 
 final fakeData = [
   ListData(
@@ -114,4 +116,110 @@ final fakeData = [
     replyAvatars: [],
     likes: 5,
   ),
+];
+
+final fakeDataSearch = [
+  SearchData(
+    avatar: "assets/avatars/elon.webp",
+    name: "Elon Musk",
+    account: "elonmusk",
+    blueCheck: true,
+    followers: "11.5M",
+  ),
+  SearchData(
+    avatar: "assets/avatars/brucelee.jpeg",
+    name: "Bruce Lee",
+    account: "iambruce",
+    blueCheck: true,
+    followers: "38.2M",
+  ),
+  SearchData(
+    avatar: "assets/avatars/johnwick.jpeg",
+    name: "John Wick",
+    account: "johnwickofficial",
+    blueCheck: true,
+    followers: "5.3M",
+  ),
+  SearchData(
+    avatar: "assets/avatars/kimj.jpeg",
+    name: "Kim Jeong Un",
+    account: "kimj",
+    blueCheck: false,
+    followers: "1.1k",
+  ),
+  SearchData(
+    avatar: "assets/avatars/psw.jpg",
+    name: "Park Seong Woong",
+    account: "gooddaytodie",
+    blueCheck: true,
+    followers: "3.1k",
+  ),
+  SearchData(
+    avatar: "assets/avatars/tony.jpeg",
+    name: "Tony Stark",
+    account: "iamironman",
+    blueCheck: true,
+    followers: "45.5M",
+  ),
+  SearchData(
+    avatar: "assets/avatars/trump.jpeg",
+    name: "Donald Trump",
+    account: "america1st",
+    blueCheck: true,
+    followers: "4.5M",
+  ),
+  SearchData(
+    avatar: "assets/avatars/ma.jpeg",
+    name: "Don Lee",
+    account: "donlee",
+    blueCheck: true,
+    followers: "1.5M",
+  ),
+  SearchData(
+    avatar: "assets/avatars/zcbg.jpeg",
+    name: "Mark Zuckerberg",
+    account: "meta",
+    blueCheck: true,
+    followers: "23.1M",
+  ),
+];
+
+final fakeDataActivity = [
+  ActivityData(
+      avatar: "assets/avatars/zcbg.jpeg",
+      account: "meta",
+      time: "4h",
+      category: "Mentioned you",
+      avatarCategory: "Mentions",
+      text: "Here's a thread you should follow if you love meta @meta",
+      following: false),
+  ActivityData(
+      avatar: "assets/avatars/nike.png",
+      account: "nike",
+      time: "6h",
+      category: "Starting out my sports club with threads, follow me!",
+      avatarCategory: "Replies",
+      text: "Count me in!",
+      following: false),
+  ActivityData(
+      avatar: "assets/avatars/mnk.jpg",
+      account: "brighteyes",
+      time: "7h",
+      category: "Followed you",
+      avatarCategory: "Following",
+      following: true),
+  ActivityData(
+      avatar: "assets/avatars/fu.jpg",
+      account: "fubao",
+      time: "8h",
+      category: "Eat bamboo! 🐼🐼🐼🌴",
+      avatarCategory: "Likes",
+      following: false),
+  ActivityData(
+      avatar: "assets/avatars/ma.jpeg",
+      account: "donlee",
+      time: "8h",
+      category: "😗 😙 😚",
+      avatarCategory: "Likes",
+      following: false),
 ];
