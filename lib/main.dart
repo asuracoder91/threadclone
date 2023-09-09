@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'constants/sizes.dart';
+import 'repos/dark_mode_provider.dart';
 import 'router.dart';
 
 void main() async {
@@ -18,19 +19,21 @@ void main() async {
   );
 
   runApp(
-    const ProviderScope(child: TwitterApp()),
+    const ProviderScope(child: ThreadApp()),
   );
 }
 
-class TwitterApp extends ConsumerWidget {
-  const TwitterApp({super.key});
+class ThreadApp extends ConsumerWidget {
+  const ThreadApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    bool darkMode = ref.watch(darkModeProvider);
+
     return MaterialApp.router(
       routerConfig: ref.watch(routerProvider),
       debugShowCheckedModeBanner: false,
-      title: 'Twitter Clone',
+      title: 'Thread Clone',
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -40,7 +43,7 @@ class TwitterApp extends ConsumerWidget {
         Locale('ko'),
         Locale('en'),
       ],
-      themeMode: ThemeMode.system,
+      themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(),
         brightness: Brightness.light,
@@ -73,18 +76,20 @@ class TwitterApp extends ConsumerWidget {
         useMaterial3: true,
       ),
       darkTheme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(),
         tabBarTheme: const TabBarTheme(
           indicatorColor: Colors.white,
         ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Color(0xFFE9435A),
         ),
-        textTheme: Typography.whiteMountainView,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Colors.black,
         appBarTheme: AppBarTheme(
           surfaceTintColor: Colors.grey.shade900,
-          backgroundColor: Colors.grey.shade900,
+          backgroundColor: Colors.black,
           titleTextStyle: const TextStyle(
             color: Colors.black,
             fontSize: Sizes.size18,

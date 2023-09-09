@@ -4,6 +4,7 @@ import 'package:thread/constants/gaps.dart';
 import 'package:thread/constants/sizes.dart';
 import 'package:thread/main/widgets/activity_block.dart';
 
+import '../../repos/dark_mode_provider.dart';
 import '../model/fake_data.dart';
 
 class ActivityPage extends ConsumerStatefulWidget {
@@ -52,13 +53,16 @@ class _ActivityPageState extends ConsumerState<ActivityPage>
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     "Activity",
                     style: TextStyle(
                       fontSize: Sizes.size28,
                       fontWeight: FontWeight.w700,
+                      color: ref.read(darkModeProvider)
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
                 ),
@@ -69,11 +73,15 @@ class _ActivityPageState extends ConsumerState<ActivityPage>
                     controller: _tabController,
                     isScrollable: true,
                     indicator: BoxDecoration(
-                      color: Colors.black,
+                      color: ref.read(darkModeProvider)
+                          ? Colors.grey.shade600
+                          : Colors.black,
                       borderRadius: BorderRadius.circular(15),
                     ),
                     labelColor: Colors.white,
-                    unselectedLabelColor: Colors.black,
+                    unselectedLabelColor: ref.read(darkModeProvider)
+                        ? Colors.grey.shade700
+                        : Colors.black,
                     labelStyle: const TextStyle(
                       fontSize: 16,
                       color: Colors.white,

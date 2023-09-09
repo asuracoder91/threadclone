@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../constants/gaps.dart';
+import '../../repos/dark_mode_provider.dart';
 
-class SearchBlock extends StatefulWidget {
+class SearchBlock extends ConsumerStatefulWidget {
   const SearchBlock({
     super.key,
     required this.avatar,
@@ -20,10 +22,10 @@ class SearchBlock extends StatefulWidget {
   final String followers;
 
   @override
-  State<SearchBlock> createState() => _ArticleBlockState();
+  ConsumerState<SearchBlock> createState() => _ArticleBlockState();
 }
 
-class _ArticleBlockState extends State<SearchBlock> {
+class _ArticleBlockState extends ConsumerState<SearchBlock> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -67,9 +69,12 @@ class _ArticleBlockState extends State<SearchBlock> {
                         children: [
                           Text(
                             widget.account,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
+                              color: ref.read(darkModeProvider)
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
                           Gaps.h4,
@@ -105,11 +110,13 @@ class _ArticleBlockState extends State<SearchBlock> {
                           width: 0.5,
                         ),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           "Follow",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: ref.read(darkModeProvider)
+                                ? Colors.white
+                                : Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),
@@ -123,9 +130,10 @@ class _ArticleBlockState extends State<SearchBlock> {
             Gaps.v4,
             Text(
               "${widget.followers} Followers",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
+                color: ref.read(darkModeProvider) ? Colors.white : Colors.black,
               ),
             ),
             Gaps.v4,

@@ -6,6 +6,7 @@ import 'package:thread/constants/gaps.dart';
 import 'package:thread/constants/sizes.dart';
 import 'package:thread/main/widgets/search_block.dart';
 
+import '../../repos/dark_mode_provider.dart';
 import '../model/fake_data.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
@@ -31,13 +32,16 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     "Search",
                     style: TextStyle(
                       fontSize: Sizes.size28,
                       fontWeight: FontWeight.w700,
+                      color: ref.read(darkModeProvider)
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
                 ),

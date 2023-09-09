@@ -1,23 +1,34 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:thread/main/view/shoot_photo_screen.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
 
 class WritePage extends StatefulWidget {
-  const WritePage({super.key});
+  const WritePage({super.key, this.photo});
+
+  final XFile? photo;
 
   @override
   State<WritePage> createState() => _WritePageState();
 }
 
 class _WritePageState extends State<WritePage> {
+  XFile? _photo;
+
   final TextEditingController _textEditingController = TextEditingController();
   bool _isTyped = false;
 
   @override
   void initState() {
     super.initState();
+    _photo = widget.photo;
+
     _textEditingController.addListener(() {
       setState(() {
         _isTyped = _textEditingController.text.isNotEmpty;
@@ -27,6 +38,19 @@ class _WritePageState extends State<WritePage> {
 
   _closeWritePage() {
     Navigator.of(context).pop();
+  }
+
+  void _onClipPressed() {
+    Navigator.of(context)
+        .push<XFile>(
+            MaterialPageRoute(builder: (context) => const ShootPhotoScreen()))
+        .then((result) {
+      if (result != null) {
+        setState(() {
+          _photo = result;
+        });
+      }
+    });
   }
 
   @override
@@ -42,6 +66,7 @@ class _WritePageState extends State<WritePage> {
             borderRadius: BorderRadius.circular(Sizes.size20),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -69,12 +94,15 @@ class _WritePageState extends State<WritePage> {
               // 글쓰기 공간 분리
               Expanded(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
@@ -146,11 +174,19 @@ class _WritePageState extends State<WritePage> {
                                       ),
                                     ),
                                     Gaps.v10,
-                                    const FaIcon(
-                                      FontAwesomeIcons.paperclip,
-                                      color: Colors.grey,
-                                      size: 24.0,
+                                    GestureDetector(
+                                      onTap: _onClipPressed,
+                                      child: const FaIcon(
+                                        FontAwesomeIcons.paperclip,
+                                        color: Colors.grey,
+                                        size: 24.0,
+                                      ),
                                     ),
+                                    if (_photo != null)
+                                      Image.file(
+                                        File(_photo!.path),
+                                        width: 200,
+                                      ),
                                   ]),
                             ),
                           ),

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thread/main/model/activity_data.dart';
 
 import '../../constants/gaps.dart';
+import '../../repos/dark_mode_provider.dart';
 
-class ActivityBlock extends StatefulWidget {
+class ActivityBlock extends ConsumerStatefulWidget {
   const ActivityBlock({
     super.key,
     required this.avatar,
@@ -26,14 +28,18 @@ class ActivityBlock extends StatefulWidget {
   final bool following;
 
   @override
-  State<ActivityBlock> createState() => _ArticleBlockState();
+  ConsumerState<ActivityBlock> createState() => _ArticleBlockState();
 }
 
-class _ArticleBlockState extends State<ActivityBlock> {
+class _ArticleBlockState extends ConsumerState<ActivityBlock> {
   _getAvatarCategoryIcon(String avatarCategory) {
     switch (avatarCategory) {
       case "Mentions":
-        return const FaIcon(FontAwesomeIcons.at, size: 9, color: Colors.white);
+        return const FaIcon(
+          FontAwesomeIcons.at,
+          size: 9,
+          color: Colors.white,
+        );
       case "Replies":
         return const FaIcon(FontAwesomeIcons.reply,
             size: 9, color: Colors.white);
@@ -133,9 +139,12 @@ class _ArticleBlockState extends State<ActivityBlock> {
                         children: [
                           Text(
                             widget.account,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
+                              color: ref.read(darkModeProvider)
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
                           Gaps.h4,
@@ -200,8 +209,10 @@ class _ArticleBlockState extends State<ActivityBlock> {
               width: size.width - 80,
               child: Text(
                 widget.text ?? "",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
+                  color:
+                      ref.read(darkModeProvider) ? Colors.white : Colors.black,
                 ),
               ),
             ),
