@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:thread/main/view/main_page.dart';
 import 'package:thread/main/view/search_page.dart';
 import 'package:thread/main/view/user_page.dart';
@@ -9,16 +10,25 @@ import '../widgets/write_page.dart';
 import 'activity_page.dart';
 
 class ListPage extends ConsumerStatefulWidget {
-  const ListPage({super.key});
+  const ListPage({super.key, required this.tab});
   static const routeURL = "/";
-  static const routeName = "listPage";
+  static const routeName = "mainNavigation";
+  final String tab;
 
   @override
   ConsumerState<ListPage> createState() => _ListPageState();
 }
 
 class _ListPageState extends ConsumerState<ListPage> {
-  int _selectedIndex = 0;
+  final List<String> _tabs = [
+    "",
+    "search",
+    "write", // 글쓰기용 fake tab
+    "activity",
+    "profile",
+  ];
+
+  late int _selectedIndex = _tabs.indexOf(widget.tab);
 
   final screens = [
     const MainPage(),
@@ -31,6 +41,7 @@ class _ListPageState extends ConsumerState<ListPage> {
   ];
 
   void _onTap(int index) {
+    context.go("/${_tabs[index]}");
     switch (index) {
       case 2:
         showModalBottomSheet(

@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:thread/main/view/privacy_screen.dart';
 
-class SettingsScreen extends StatefulWidget {
+import '../../repos/dark_mode_provider.dart';
+
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
+  static const routeURL = "/settings";
+  static const routeName = "settings";
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   void _onGoPressed() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const PrivacyScreen()));
+  }
+
+  void _toggleDarkMode() {
+    ref.read(darkModeProvider.notifier).toggle(); // 현재 상태 반전
+  }
+
+  _backToProfile() {
+    Navigator.pop(context);
   }
 
   @override
@@ -21,16 +35,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         leadingWidth: 130,
         automaticallyImplyLeading: false,
-        leading: const Padding(
-          padding: EdgeInsets.all(18.0),
-          child: Text("< Back",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              )),
+        leading: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: GestureDetector(
+            onTap: _backToProfile,
+            child: const Text("< Back",
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+          ),
         ),
         centerTitle: true,
-        title: const Text('Settings'),
+        title: Text(
+          "Settings",
+          style: TextStyle(
+            fontSize: 16,
+            color: ref.watch(darkModeProvider) ? Colors.white : Colors.black,
+          ),
+        ),
       ),
       body: ListView(children: [
         const Divider(
@@ -39,6 +61,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         const ListTile(
           leading: FaIcon(FontAwesomeIcons.userPlus),
           title: Text("Follow and invite friends"),
+        ),
+        SwitchListTile(
+          title: const Text("Dark mode"),
+          value: ref.watch(darkModeProvider),
+          onChanged: (value) {
+            _toggleDarkMode();
+          },
+          secondary: const FaIcon(FontAwesomeIcons.lock),
         ),
         const ListTile(
           leading: FaIcon(FontAwesomeIcons.solidBell),

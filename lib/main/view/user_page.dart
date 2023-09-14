@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:thread/constants/gaps.dart';
 import 'package:thread/constants/sizes.dart';
 import 'package:thread/main/view/activity_simple_page.dart';
@@ -14,17 +15,16 @@ import 'settings_screen.dart';
 
 class UserPage extends ConsumerStatefulWidget {
   const UserPage({super.key});
-  static const routeURL = "/userpage";
-  static const routeName = "userPage";
+  static const routeURL = "/profile";
+  static const routeName = "profile";
 
   @override
   ConsumerState<UserPage> createState() => _UserPageState();
 }
 
 class _UserPageState extends ConsumerState<UserPage> {
-  void _onGearPressed() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const SettingsScreen()));
+  void _onGearPressed() async {
+    await context.push(SettingsScreen.routeURL).then((_) => setState(() {}));
   }
 
   @override
