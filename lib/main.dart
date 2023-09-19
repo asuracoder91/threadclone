@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -5,11 +6,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'constants/sizes.dart';
+import 'firebase_options.dart';
 import 'repos/dark_mode_provider.dart';
 import 'router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // runApp 실행전 모든 binding을 초기화하는 명령어
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await SystemChrome.setPreferredOrientations(
     [

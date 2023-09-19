@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thread/main/view/privacy_screen.dart';
 
+import '../../authentications/repos/authentication_repo.dart';
 import '../../repos/dark_mode_provider.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -109,7 +110,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       icon: const FaIcon(FontAwesomeIcons.x),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        ref.read(authRepo).signOut();
+                        context.go("/login");
+                      },
                       icon: const FaIcon(FontAwesomeIcons.o),
                     ),
                   ]),

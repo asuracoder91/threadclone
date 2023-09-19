@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "821699920655",
+    "project_id": "thread-clone-dd1f8",
+    "storage_bucket": "thread-clone-dd1f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821699920655:android:42ab5ce1dbd973fed5b47a",
+        "android_client_info": {
+          "package_name": "com.example.thread"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPsl7jgpDEyFUIQJupcOnMyrLOAyhyZq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
