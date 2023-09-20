@@ -77,10 +77,18 @@ class _ArticleBlockState extends ConsumerState<ArticleBlock> {
                               shape: BoxShape.circle,
                               color: Colors.grey,
                             ),
-                            child: CircleAvatar(
-                              radius: 17,
-                              foregroundImage: AssetImage(widget.avatar),
-                            ),
+                            child: widget.avatar == ""
+                                ? const CircleAvatar(
+                                    radius: 17,
+                                    child: Text(
+                                      "Anon",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    radius: 17,
+                                    foregroundImage: AssetImage(widget.avatar),
+                                  ),
                           ),
                         ),
                         Positioned(
@@ -198,7 +206,7 @@ class _ArticleBlockState extends ConsumerState<ArticleBlock> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     image: DecorationImage(
-                                      image: AssetImage(widget.images[index]),
+                                      image: NetworkImage(widget.images[index]),
                                       fit: BoxFit.cover,
                                     ),
                                   ),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thread/constants/gaps.dart';
@@ -14,35 +15,50 @@ class MainPage extends ConsumerWidget {
     final articles = fakeData;
 
     return Container(
-      decoration: BoxDecoration(
-        color: ref.watch(darkModeProvider) ? Colors.black : Colors.white,
-      ),
-      child: ListView.builder(
-          itemCount: articles.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                Container(
-                  color: Colors.white,
-                  child: ArticleBlock(
-                    avatar: articles[index].avatar,
-                    name: articles[index].name,
-                    blueCheck: articles[index].blueCheck,
-                    time: articles[index].time,
-                    text: articles[index].text,
-                    images: articles[index].images,
-                    replies: articles[index].replies,
-                    replyAvatars: articles[index].replyAvatars,
-                    likes: articles[index].likes,
-                  ),
-                ),
-                Gaps.v6,
-                const Divider(
-                  thickness: 0.5,
-                ),
-              ],
-            );
-          }),
-    );
+        decoration: BoxDecoration(
+          color: ref.watch(darkModeProvider) ? Colors.black : Colors.white,
+        ),
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('images')
+              .orderBy('createdAt', descending: true)
+              .snapshots(),
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            final docs = snapshot.data!.docs;
+            return ListView.builder(
+                itemCount: docs.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        child: ArticleBlock(
+                          avatar: docs[index]['avatar'],
+                          name: docs[index]['name'],
+                          blueCheck: docs[index]['blueCheck'],
+                          time: docs[index]['time'],
+                          text: docs[index]['text'],
+                          images: List<String>.from(docs[index]['images']),
+                          replies: docs[index]['replies'],
+                          replyAvatars:
+                              List<String>.from(docs[index]['replyAvatars']),
+                          likes: docs[index]['likes'],
+                        ),
+                      ),
+                      Gaps.v6,
+                      const Divider(
+                        thickness: 0.5,
+                      ),
+                    ],
+                  );
+                });
+          },
+        ));
   }
 }

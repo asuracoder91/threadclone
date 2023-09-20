@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:thread/main/view/photo_preview_screen.dart';
 
 import '../../../constants/gaps.dart';
 import '../../../constants/sizes.dart';
@@ -28,7 +27,7 @@ class _ShootPhotoScreenState extends State<ShootPhotoScreen>
   late final bool _noCamera = kDebugMode && Platform.isIOS;
 
   late CameraController _cameraController;
-  late FlashMode _flashMode;
+  FlashMode _flashMode = FlashMode.off;
 
   late final AnimationController _buttonAnimationController =
       AnimationController(

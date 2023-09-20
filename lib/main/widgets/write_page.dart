@@ -5,20 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thread/main/view/shoot_photo_screen.dart';
+import 'package:thread/main/view_models/upload_image_view_model.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
 
-class WritePage extends StatefulWidget {
+class WritePage extends ConsumerStatefulWidget {
   const WritePage({super.key, this.photo});
 
   final XFile? photo;
 
   @override
-  State<WritePage> createState() => _WritePageState();
+  ConsumerState<WritePage> createState() => _WritePageState();
 }
 
-class _WritePageState extends State<WritePage> {
+class _WritePageState extends ConsumerState<WritePage> {
   XFile? _photo;
 
   final TextEditingController _textEditingController = TextEditingController();
@@ -51,6 +52,15 @@ class _WritePageState extends State<WritePage> {
         });
       }
     });
+  }
+
+  void _onWritePressed() {
+    print("Here?");
+    print(_photo!.path);
+    print(_textEditingController.text);
+    ref
+        .read(uploadImageProvider.notifier)
+        .uploadImage(File(_photo!.path), _textEditingController.text, context);
   }
 
   @override
@@ -116,15 +126,15 @@ class _WritePageState extends State<WritePage> {
                                   child: const Center(
                                     child: CircleAvatar(
                                       radius: 21,
-                                      foregroundImage: AssetImage(
-                                          "assets/avatars/brucelee.jpeg"),
+                                      child: Text("Anon",
+                                          style: TextStyle(fontSize: 10)),
                                     ),
                                   ),
                                 ),
                               ),
                               Gaps.v6,
                               Container(
-                                height: 60,
+                                height: _photo == null ? 60 : 240,
                                 width: 2.5,
                                 color: Colors.grey.shade300,
                               ),
@@ -142,8 +152,10 @@ class _WritePageState extends State<WritePage> {
                                     child: const Center(
                                       child: CircleAvatar(
                                         radius: 10,
-                                        foregroundImage: AssetImage(
-                                            "assets/avatars/brucelee.jpeg"),
+                                        child: Text(
+                                          "Anon",
+                                          style: TextStyle(fontSize: 6),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -151,14 +163,14 @@ class _WritePageState extends State<WritePage> {
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Expanded(
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      "Bruce_Lee",
+                                      "Anonymous",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 14.0),
@@ -174,6 +186,11 @@ class _WritePageState extends State<WritePage> {
                                       ),
                                     ),
                                     Gaps.v10,
+                                    if (_photo != null)
+                                      Image.file(
+                                        File(_photo!.path),
+                                        width: 300,
+                                      ),
                                     GestureDetector(
                                       onTap: _onClipPressed,
                                       child: const FaIcon(
@@ -182,11 +199,6 @@ class _WritePageState extends State<WritePage> {
                                         size: 24.0,
                                       ),
                                     ),
-                                    if (_photo != null)
-                                      Image.file(
-                                        File(_photo!.path),
-                                        width: 200,
-                                      ),
                                   ]),
                             ),
                           ),
@@ -210,12 +222,15 @@ class _WritePageState extends State<WritePage> {
                         color: Colors.grey.shade600,
                       ),
                     ),
-                    Text(
-                      "Post",
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                        color: _isTyped ? Colors.blue : Colors.blue.shade100,
+                    GestureDetector(
+                      onTap: _onWritePressed,
+                      child: Text(
+                        "Post",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w700,
+                          color: _isTyped ? Colors.blue : Colors.blue.shade100,
+                        ),
                       ),
                     ),
                   ],

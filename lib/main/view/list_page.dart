@@ -41,7 +41,6 @@ class _ListPageState extends ConsumerState<ListPage> {
   ];
 
   void _onTap(int index) {
-    context.go("/${_tabs[index]}");
     switch (index) {
       case 2:
         showModalBottomSheet(
@@ -51,6 +50,7 @@ class _ListPageState extends ConsumerState<ListPage> {
           isScrollControlled: true,
         );
       default:
+        context.go("/${_tabs[index]}");
         setState(() {
           _selectedIndex = index;
         });
